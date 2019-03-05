@@ -4,4 +4,6 @@ This is blog system in Django
  - Canonical URLs for models
  - pagination
  - Class based view
+ - forms
+ - email functionality
 

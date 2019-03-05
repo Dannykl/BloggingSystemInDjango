@@ -1,0 +1,21 @@
+{% extends "blog/base.html" %}
+{% block title %} Share a post {%endblock%}
+
+{%block content%}
+    {% if sent %}
+        <h1>Email successfully sent</h1>
+        <p>
+            "{{post.title}}" was sucessfully sent to "{{cd.to}}"
+        </p>
+    {%else%}
+        <h1> Share "{{post.title}}" by email</h1>
+        <form action="."method="post">
+            {{form.as_p}}
+            {%csrf_token%}
+            <input type="submit" value ="Send Email" >
+        </form>
+    {%endif%}
+{%endblock%}
+
+<!--The csrf_token middleware and template tag provides easy-to-use protection against Cross Site Request Forgeries.
+csrf_token must be placed in all form that are submitted via post-->
