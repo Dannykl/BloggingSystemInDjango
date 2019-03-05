@@ -121,8 +121,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST = 'localhost'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 587
