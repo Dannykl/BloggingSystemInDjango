@@ -48,5 +48,24 @@ class Post(models.Model):
         return self.title
 
 
+class Comment(models.Model):
+    # on_delete=models.CASCADE ==> When the referenced object is deleted, also delete the objects that have references to it
+    post = models.ForeignKey(Post, related_name='comments',on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    email = models.EmailField()
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('created',)
+
+    def __str__(self):
+        return 'Comment by {} on {} '.format(self.name,self.post)
+
+
+
+
 
 
