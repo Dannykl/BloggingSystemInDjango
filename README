@@ -5,6 +5,7 @@ This is blog system in Django
  - pagination
  - Class based view
  - forms
- - email functionality
+ - sharing (via email) functionality
+ - comment section
 
 http://dannykl.pythonanywhere.com
