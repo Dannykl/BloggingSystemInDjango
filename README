@@ -3,9 +3,8 @@ This is blog system in Django
  - creating model manager
  - Canonical URLs for models
  - pagination
- - Class based view
- - forms
  - sharing (via email) functionality
  - comment section
+ - tagging functionality - suggest similar posts based on the tags
 
 http://dannykl.pythonanywhere.com
