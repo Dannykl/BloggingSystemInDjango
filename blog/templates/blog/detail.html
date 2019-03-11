@@ -11,11 +11,11 @@
     </p>
 
     <h2>Similar posts</h2>
-    {%for post in similar_posts%}
+    {% for post in similar_posts %}
         <p>
             <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
         </p>
-        {%empty%}
+        {% empty %}
             There are no similar post/s yet
     {%endfor%}
 

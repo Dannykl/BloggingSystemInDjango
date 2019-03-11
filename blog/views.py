@@ -68,11 +68,13 @@ def post_detail(request, year,month,day,post):
         comment_form = CommentForm()
 
     # list similar posts
-    post_tag_ids = Post.tags.values_list('id',flat=True)
-    similar_posts = Post.published.filter(tags__in=post_tag_ids)\
-                                  .exclude(id=post.id)
+    post_tags_ids = post.tags.values_list('id', flat=True)
+    similar_posts = Post.published.filter(tags__in=post_tags_ids)\
+                                 .exclude(id=post.id)
     similar_posts = similar_posts.annotate(same_tags=Count('tags'))\
-                                 .order_by('-same_tags','-publish')[:5]
+                               .order_by('-same_tags','-publish')[:4]
+
+
     return render(request,template,{'post':post,
                                     'comments':comments,
                                     'comment_form':comment_form,
