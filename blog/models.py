@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from django.contrib.auth.models import User
+from taggit.managers import TaggableManager
 
 
 class PublishedManager(models.Manager):
@@ -47,6 +48,7 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    tags = TaggableManager()
 
 class Comment(models.Model):
     # on_delete=models.CASCADE ==> When the referenced object is deleted, also delete the objects that have references to it

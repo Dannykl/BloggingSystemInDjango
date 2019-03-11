@@ -19,8 +19,9 @@ from django.urls import path
 
 urlpatterns = [
     # post views
-    # path('',views.post_list, name='post_list'),
-    path('',views.PostListView.as_view(),name='post_list'),
+    path('',views.post_list, name='post_list'), # this is function based for list of posts
+    # path('',views.PostListView.as_view(),name='post_list'), # this is classed based for list of posts
+    path('tag/(?P<tag_slug>[-\w]+)/',views.post_list,name='post_list_by_tag'), # this is only used if tags is given to list post by tags
     path('(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/''(?P<post>[-\w]+)/',views.post_detail,name='post_detail'),
     path('(?P<post_id>\d+)/share/',views.post_share,name='post_share'),
 ]

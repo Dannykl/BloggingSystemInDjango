@@ -4,6 +4,8 @@ from .models import Post,Comment
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.views.generic import ListView
 from .forms import EmailPostForm,CommentForm
+from taggit.models import Tag
+from django.db.models import Count
 
 class PostListView(ListView):
 
@@ -13,23 +15,30 @@ class PostListView(ListView):
     paginate_by = 3
     template_name = template
 
-# def post_list(request):
-#     template = 'blog/list.html'
-#     list_of_objects = Post.published.all()
-#     #set 3 posts in the page
-#     paginator = Paginator(list_of_objects,4)
-#     page = request.GET.get('page')
-#
-#     try:
-#         posts = paginator.page(page)
-#     except PageNotAnInteger:
-#         # deliver the first page if page is not an integer
-#         posts = paginator.page(1)
-#     except EmptyPage:
-#         # deliver the last page of the result if the page is out of range
-#         posts = paginator.page(paginator.num_pages)
-#
-#     return render (request,template,{'page':page,'posts':posts})
+# tag_slug (tag) is optional parameter
+def post_list(request, tag_slug=None):
+    template = 'blog/list.html'
+    list_of_objects = Post.published.all()
+    tag = None
+    # the bellow if statement is only executed if the optional parameter, tag_slug, is given
+    if(tag_slug):
+        tag = get_object_or_404(Tag,slug=tag_slug)
+        # filter the posts that have the given tag
+        list_of_objects = list_of_objects.filter(tags__in=[tag])
+    #set 3 posts in the page
+    paginator = Paginator(list_of_objects,4)
+    page = request.GET.get('page')
+
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        # deliver the first page if page is not an integer
+        posts = paginator.page(1)
+    except EmptyPage:
+        # deliver the last page of the result if the page is out of range
+        posts = paginator.page(paginator.num_pages)
+
+    return render (request,template,{'page':page,'posts':posts,'tag':tag})
 
 
 def post_detail(request, year,month,day,post):
@@ -57,9 +66,17 @@ def post_detail(request, year,month,day,post):
 
     else:
         comment_form = CommentForm()
+
+    # list similar posts
+    post_tag_ids = Post.tags.values_list('id',flat=True)
+    similar_posts = Post.published.filter(tags__in=post_tag_ids)\
+                                  .exclude(id=post.id)
+    similar_posts = similar_posts.annotate(same_tags=Count('tags'))\
+                                 .order_by('-same_tags','-publish')[:5]
     return render(request,template,{'post':post,
                                     'comments':comments,
-                                    'comment_form':comment_form})
+                                    'comment_form':comment_form,
+                                    'similar_posts':similar_posts})
 
 def post_share(request,post_id):
 
